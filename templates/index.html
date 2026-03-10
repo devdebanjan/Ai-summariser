@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Text Summarizer</title>
+    <link rel="stylesheet" href="/static/style.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">SnapSummary</h1>
+        <form id="summarize-form" class="form">
+            <textarea id="text-input" class="textarea" placeholder="Paste your text here..." required></textarea>
+            <button type="submit" class="btn">Summarize</button>
+        </form>
+        <div class="summary-box">
+            <h3 class="summary-title">Summary Output:</h3>
+            <div id="summary-output" class="summary-output"></div>
+            <div id="loading-spinner" class="loader hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("summarize-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const text = document.getElementById("text-input").value;
+            const outputDiv = document.getElementById("summary-output");
+            const spinner = document.getElementById("loading-spinner");
+
+            outputDiv.innerText = "Generating Summary...";
+            spinner.classList.remove("hidden");
+
+            try {
+                const response = await fetch("/summarize", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({ text })
+                });
+
+                const result = await response.json();
+                outputDiv.innerText = result.summary || result.error;
+            } catch (error) {
+                outputDiv.innerText = "Error: Failed to generate summary.";
+            } finally {
+                spinner.classList.add("hidden");
+            }
+        });
+    </script>
+</body>
+</html>
