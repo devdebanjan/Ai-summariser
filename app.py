@@ -47,4 +47,4 @@ def summarize():
         return jsonify({"error": "Failed to generate summary."}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
