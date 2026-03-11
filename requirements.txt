@@ -1,6 +1,5 @@
-flask
 transformers
 torch
+gradio
 huggingface_hub
-gunicorn
 sentencepiece
